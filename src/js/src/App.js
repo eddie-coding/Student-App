@@ -8,7 +8,8 @@ import { LoadingOutlined } from '@ant-design/icons';
 import {
   Table,
   Avatar,
-  Spin
+  Spin,
+  Modal
 } from 'antd';
 
 const getIndicatorIcon = () => <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -17,12 +18,17 @@ class App extends Component{
 
     state = {
       students: [],
-      isFetching: false
+      isFetching: false,
+      isAddStudentModalVisible: false
     }
 
     componentDidMount () {
       this.fetchStudents();
     }
+
+    openAddStudentModal= () => this.setState({isAddStudentModalVisible: true})
+
+    closeAddStudentModal= () => this.setState({isAddStudentModalVisible: false})
 
     fetchStudents = () => {
       this.setState({
@@ -41,7 +47,7 @@ class App extends Component{
 
   render() {
 
-    const { students, isFetching } = this.state;
+    const { students, isFetching, isAddStudentModalVisible } = this.state;
 
     if(isFetching) {
       return (
@@ -99,7 +105,17 @@ class App extends Component{
             bordered
             pagination={false}
             rowKey='studentId'/>
-          <Footer numberOfStudents={students.length}></Footer>
+          <Modal
+            title='Add new student'
+            open={isAddStudentModalVisible}
+            onOk={this.closeAddStudentModal}
+            onCancel={this.closeAddStudentModal}
+            width={1000}>
+            <h1>Hello Modal with Antd</h1>
+          </Modal>
+          <Footer 
+            numberOfStudents={students.length}
+            handleAddStudentClickEvent={this.openAddStudentModal}/>
         </Container>
       );
 
