@@ -1,19 +1,21 @@
 package com.eddie.student;
 
 import java.util.List;
-import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class StudentService {
 
-    public List<Student> getAllStudents() {
+    private final StudentDataAccessService studentDataAccessService;
 
-        return List.of(
-            new Student(UUID.randomUUID(), "Aditya", "Bahuguna", "adityabahuguna007@gmail.com", Student.Gender.MALE),
-            new Student(UUID.randomUUID(), "Rohit", "Bisht", "rohitbisht@gmail.com", Student.Gender.MALE)
-        );
+    @Autowired
+    public StudentService(StudentDataAccessService studentDataAccessService) {
+        this.studentDataAccessService = studentDataAccessService;
+    }
+
+    public List<Student> getAllStudents() {
+        return studentDataAccessService.getAllStudents();
     }   
-    
 }
