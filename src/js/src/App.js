@@ -1,5 +1,5 @@
 //import logo from './logo.svg';
-import { Component } from 'react';
+import React, { Component } from 'react';
 import Container from './Container';
 import './App.css';
 import { getAllStudents } from './client';
@@ -91,9 +91,11 @@ class App extends Component{
 
       return (
         <Container>
-        <Table 
+        <Table
+          style={{marginBottom: '100px'}}
           dataSource={students} 
-          columns={columns} 
+          columns={columns}
+          pagination={false}
           rowKey='studentId'/>
         </Container>
       );
