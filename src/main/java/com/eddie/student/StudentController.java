@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.eddie.exception.ApiRequestException;
+
 @RestController
 @RequestMapping("students")
 public class StudentController {
@@ -22,7 +24,8 @@ public class StudentController {
 
     @GetMapping
     public List<Student> getAllStudents() {
-        return studentService.getAllStudents();
+        throw new ApiRequestException("Oops cannot get all students with custom exception"); 
+        //return studentService.getAllStudents();
     }
     
     @PostMapping
