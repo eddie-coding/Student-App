@@ -1,10 +1,14 @@
 package com.eddie.student;
 
+import java.sql.Types;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import jakarta.annotation.Nullable;
+
 import org.springframework.jdbc.core.RowMapper;
 
 @Repository
@@ -42,6 +46,23 @@ public class StudentDataAccessService {
                 student.getEmail(),
                 student.getGender().name().toUpperCase()
                 );       
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    boolean isEmailTaken(String email) {
+        String sql = "" +
+                "SELECT EXISTS ( " +
+                " SELECT 1 " +
+                " FROM student " +
+                " WHERE email = ?" +
+                ")";
+                return jdbcTemplate.queryForObject(
+                    sql,
+                    new Object[]{email},
+                    new int[]{Types.VARCHAR},
+                    (resultSet, i) -> resultSet.getBoolean(1)
+                );
+                
     }
 
     private RowMapper<Student> mapStudentFromDb() {

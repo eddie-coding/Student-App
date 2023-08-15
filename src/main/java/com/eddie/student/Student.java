@@ -4,12 +4,24 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+
 public class Student {
 
     private final UUID studentId;
+
+    @NotBlank
     private final String firstName;
+
+    @NotBlank
     private final String lastName;
+
+    @NotBlank
     private final String email;
+
+    @NotNull
     private final Gender gender;
 
     enum Gender {

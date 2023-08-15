@@ -40,6 +40,12 @@ const AddStudentForm = (props) => (
                 props.onSuccess();
                 setSubmitting(false);
                 })
+                .catch(err => {
+                    props.onFailure(err);
+                })
+                .finally(() => {
+                    setSubmitting(false);
+                })
             }}>
         {({
             values,
