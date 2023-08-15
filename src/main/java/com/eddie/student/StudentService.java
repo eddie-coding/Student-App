@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,5 +43,35 @@ public class StudentService {
         }
 
         studentDataAccessService.insertStudent(newStudentId, student);
-    }   
+    }
+
+    public List<StudentCourse> getAllCoursesForStudent(UUID studentId) {
+        return studentDataAccessService.selectAllStudentCourses(studentId);
+    }
+
+    public void updateStudent(UUID studentId, Student student) {
+        Optional.ofNullable(student.getEmail())
+                .ifPresent(email -> {
+                    boolean taken = studentDataAccessService.selectExistsEmail(studentId, email);
+                    if (!taken) {
+                        studentDataAccessService.updateEmail(studentId, email);
+                    } else {
+                        throw new IllegalStateException("Email already in use: " + student.getEmail());
+                    }
+                });
+
+        Optional.ofNullable(student.getFirstName())
+                .filter(fistName -> !StringUtils.isEmpty(fistName))
+                .map(StringUtils::capitalize)
+                .ifPresent(firstName -> studentDataAccessService.updateFirstName(studentId, firstName));
+
+        Optional.ofNullable(student.getLastName())
+                .filter(lastName -> !StringUtils.isEmpty(lastName))
+                .map(StringUtils::capitalize)
+                .ifPresent(lastName -> studentDataAccessService.updateLastName(studentId, lastName));
+    }
+
+    void deleteStudent(UUID studentId) {
+        studentDataAccessService.deleteStudentById(studentId);
+    }
 }
